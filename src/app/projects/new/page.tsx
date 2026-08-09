@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import AppShell from "@/components/layout/AppShell";
 import { useRouter } from "next/navigation";
@@ -251,7 +251,7 @@ export default function NewProjectPage() {
           localStorage.setItem("latam_v4_projects", JSON.stringify(existing));
           localStorage.setItem("latam_v4_current_project", JSON.stringify(project));
 
-          router.push("/projects");
+          router.push(`/editor?projectId=${projectId}`);
           return;
         }
       } catch (err) {
@@ -265,7 +265,7 @@ export default function NewProjectPage() {
       localStorage.setItem("latam_v4_projects", JSON.stringify(existing));
       localStorage.setItem("latam_v4_current_project", JSON.stringify(project));
 
-      router.push("/projects");
+      router.push(`/editor?projectId=${projectId}`);
     })();
   }
 
