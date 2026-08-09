@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -175,9 +175,9 @@ export default function ProjectsPage() {
 
                 </div>
 
-                <button className="secondary projectButton">
+                <Link href={`/editor?projectId=${project.projectId}`} className="secondary projectButton">
                   Abrir projeto →
-                </button>
+                </Link>
 
               </article>
 
