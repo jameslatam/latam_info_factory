@@ -66,7 +66,7 @@ export default function Home() {
           <div className="aiCard">
 
             <div className="aiTop">
-              <span>AI FACTORY</span>
+              <span>LATAM INFO FACTORY</span>
               <b>V4</b>
             </div>
 

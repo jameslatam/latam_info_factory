@@ -69,7 +69,7 @@ export default function AppShell({
           className="brand"
         >
           <div className="brandMark">
-            L
+            E
           </div>
 
           <div>

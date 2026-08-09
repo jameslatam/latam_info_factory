@@ -59,7 +59,7 @@ export default function ProjectsPage() {
 
           <p>
             Projetos criados na versão
-            pessoal da LATAM Info Factory.
+            pessoal da LATAM INFO FACTORY.
           </p>
         </div>
 
