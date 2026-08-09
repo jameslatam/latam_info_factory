@@ -1129,6 +1129,189 @@ a {
   font-size: 10px;
 }
 
+/* ── Editor / Generation Page ── */
+
+.editorPage {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.editorHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 20px 0 18px;
+}
+
+.editorHeader h2 {
+  margin: 6px 0 4px;
+}
+
+.editorHeader p {
+  color: #71809b;
+  font-size: 12px;
+}
+
+.pipelineStages {
+  display: flex;
+  gap: 6px;
+  margin: 22px 0;
+  flex-wrap: wrap;
+}
+
+.pipelineStage {
+  flex: 1;
+  min-width: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 8px;
+  border-radius: 12px;
+  border: 1px solid #1b2236;
+  background: #0c111f;
+  transition: all 0.3s ease;
+}
+
+.pipelineStage.active {
+  border-color: #7a56ff;
+  background: linear-gradient(145deg, #161d38, #0f1528);
+  box-shadow: 0 0 20px rgba(122, 86, 255, 0.15);
+}
+
+.pipelineStage.done {
+  border-color: #1e3a2a;
+  background: #0d1a14;
+}
+
+.pipelineIcon {
+  font-size: 22px;
+  color: #3a4366;
+  transition: color 0.3s ease;
+}
+
+.pipelineStage.active .pipelineIcon {
+  color: #8a77ff;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.pipelineStage.done .pipelineIcon {
+  color: var(--green);
+}
+
+.pipelineLabel {
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  color: #5a6580;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.pipelineStage.active .pipelineLabel {
+  color: #c4b8ff;
+}
+
+.pipelineStage.done .pipelineLabel {
+  color: #5da67a;
+}
+
+.editorStatus {
+  margin: 10px 0;
+}
+
+.statusContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 6px;
+}
+
+.statusIcon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  font-size: 22px;
+}
+
+.statusIcon.success {
+  background: linear-gradient(135deg, #0f2a1a, #0d1a14);
+  border: 1px solid #1e4a2a;
+  color: var(--green);
+}
+
+.statusIcon.error {
+  background: linear-gradient(135deg, #2a1018, #1a0d12);
+  border: 1px solid #4a1e2a;
+  color: #ff6688;
+}
+
+.statusIcon.working {
+  background: linear-gradient(135deg, #161d38, #0f1528);
+  border: 1px solid #2a3466;
+  color: #8a77ff;
+}
+
+.statusIcon.hint {
+  background: linear-gradient(135deg, #2a2210, #1a170d);
+  border: 1px solid #4a3a1e;
+  color: #ffc656;
+}
+
+.statusContent strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.statusContent p {
+  color: #71809b;
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.workerHint {
+  margin: 12px 0;
+}
+
+.workerCommand {
+  display: block;
+  margin: 10px 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #0a0e1a;
+  border: 1px solid #222a43;
+  color: #b8c0ff;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.workerNote {
+  font-size: 11px !important;
+  color: #5a6580 !important;
+  margin-top: 6px !important;
+}
+
+.spinner {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #2a3466;
+  border-top-color: #8a77ff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
 @media (max-width: 900px) {
 
   .configSteps {
@@ -1145,6 +1328,15 @@ a {
 
   .field.wide {
     grid-column: auto;
+  }
+
+  .pipelineStages {
+    flex-direction: column;
+  }
+
+  .editorHeader {
+    flex-direction: column;
+    gap: 12px;
   }
 
 }
