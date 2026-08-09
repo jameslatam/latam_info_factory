@@ -1,0 +1,25 @@
+﻿{
+  "product": "LATAM Info Factory",
+  "version": "4.0",
+  "architecture": "cloud-first",
+  "mode": "personal-validation",
+  "status": "foundation",
+  "legacy": {
+    "v3_preserved": true
+  },
+  "planned_modules": [
+    "dashboard",
+    "project-configurator",
+    "outline-engine",
+    "content-engine",
+    "pre-design-engine",
+    "structured-content",
+    "art-director",
+    "ai-provider-router",
+    "illustration-engine",
+    "layout-engine",
+    "editor",
+    "renderer",
+    "pdf-export"
+  ]
+}
