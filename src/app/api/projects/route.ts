@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { supabaseServer } from "@/lib/supabaseServer";
+import { getSupabaseServer } from "@/lib/supabaseServer";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    const supabaseServer = getSupabaseServer();
 
     // Insert project into 'projects' table. Ensure your Supabase DB has this table.
     const { data, error } = await supabaseServer.from("projects").insert([body]);
@@ -20,6 +21,7 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
+    const supabaseServer = getSupabaseServer();
     const { data, error } = await supabaseServer
       .from("projects")
       .select("*")
