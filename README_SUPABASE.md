@@ -4,13 +4,14 @@ Supabase setup (quick)
 1) Crie um projeto no Supabase (app.supabase.com) e copie as chaves:
    - `NEXT_PUBLIC_SUPABASE_URL` (URL do projeto)
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (anon key)
-   - `SUPABASE_SERVICE_ROLE` (service role key — mantenha em segredo)
+   - `SUPABASE_SERVICE_ROLE` ou `SUPABASE_SERVICE_ROLE_KEY` (service role key — mantenha em segredo)
 
 2) Defina as variáveis no Vercel (ou em `.env.local` para desenvolvimento):
 
    NEXT_PUBLIC_SUPABASE_URL=...
    NEXT_PUBLIC_SUPABASE_ANON_KEY=...
    SUPABASE_SERVICE_ROLE=...
+   SUPABASE_SERVICE_ROLE_KEY=...
 
 3) Crie a tabela `projects` no Supabase SQL Editor com este exemplo:
 

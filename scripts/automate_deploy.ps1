@@ -46,4 +46,4 @@ if ($gitStatus) {
 }
 
 Write-Host "If Vercel is connected to this GitHub repo and main branch deploys are enabled, the app will deploy automatically after push." -ForegroundColor Cyan
-Write-Host "Make sure Vercel has the required env vars: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE." -ForegroundColor Cyan
+Write-Host "Make sure Vercel has the required env vars: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE or SUPABASE_SERVICE_ROLE_KEY." -ForegroundColor Cyan
