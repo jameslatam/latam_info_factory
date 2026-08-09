@@ -32,6 +32,11 @@ create table if not exists projects (
    npm install
    npm run dev
 
+4.1) Automação local de validação
+
+   - Windows: `cd web_v4 && .\scripts\automate_deploy.ps1`
+   - macOS/Linux: `cd web_v4 && ./scripts/automate_deploy.sh`
+
 5) Observações
    - A API `/api/projects` usa a chave de serviço — não a exponha no cliente.
    - A aplicação manterá uma cópia local em `localStorage` como fallback.

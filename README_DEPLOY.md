@@ -40,6 +40,10 @@ This guide automates as much as possible locally; you will need to provide crede
   npm install
   npm run dev
 
+5.1) Automated local validation
+  - Windows: `cd web_v4 && .\scripts\automate_deploy.ps1`
+  - macOS/Linux: `cd web_v4 && ./scripts/automate_deploy.sh`
+
 6) Troubleshooting
   - If build fails: run `npm run build` locally and fix errors. Check Node version and dependency versions.
   - If API returns 500: verify `SUPABASE_SERVICE_ROLE` and `NEXT_PUBLIC_SUPABASE_URL` are correct and table exists.
