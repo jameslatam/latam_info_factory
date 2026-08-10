@@ -825,19 +825,22 @@ a {
 }
 
 .field input,
-.field select {
+.field select,
+.field textarea {
   width: 100%;
   min-height: 48px;
-  padding: 0 14px;
+  padding: 12px 14px;
   border-radius: 9px;
   border: 1px solid #29334f;
   outline: none;
   background: #11182a;
   color: #eef1fa;
+  font-family: inherit;
 }
 
 .field input:focus,
-.field select:focus {
+.field select:focus,
+.field textarea:focus {
   border-color: #725cff;
   box-shadow:
     0 0 0 3px

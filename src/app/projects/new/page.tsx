@@ -980,32 +980,21 @@ function ReferenceFileField({
   };
 
   return (
-    <label className="field wide" style={{ gridColumn: 'span 2' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+    <div className="field wide">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
         <span>{label}</span>
-        <label style={{ fontSize: 13, color: '#c084fc', cursor: 'pointer', fontWeight: 600 }}>
+        <label style={{ fontSize: "11px", color: "#9d68ff", cursor: "pointer", fontWeight: "bold" }}>
           📁 Carregar arquivo (.txt / .md / .json)
-          <input type="file" accept=".txt,.md,.json,.csv" onChange={handleFileUpload} style={{ display: 'none' }} />
+          <input type="file" accept=".txt,.md,.json,.csv" onChange={handleFileUpload} style={{ display: "none" }} />
         </label>
       </div>
       <textarea
         rows={4}
         value={value}
         placeholder={placeholder}
-        style={{
-          width: '100%',
-          background: 'rgba(15, 23, 42, 0.6)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          borderRadius: 12,
-          padding: 12,
-          color: '#f8fafc',
-          fontSize: 14,
-          fontFamily: 'inherit',
-          resize: 'vertical'
-        }}
         onChange={(event) => onChange(event.target.value)}
       />
-    </label>
+    </div>
   );
 }
 
