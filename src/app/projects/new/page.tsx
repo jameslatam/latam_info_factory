@@ -841,6 +841,15 @@ export default function NewProjectPage() {
                   }
                 />
 
+                <Review
+                  label="E-book Base"
+                  value={
+                    form.referenceText
+                      ? `${form.referenceText.length} caracteres (Material Base)`
+                      : "Nenhum"
+                  }
+                />
+
               </div>
 
 
