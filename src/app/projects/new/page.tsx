@@ -30,6 +30,7 @@ type ProductForm = {
   generateCover: boolean;
   generateImages: boolean;
   qualityMode: string;
+  referenceText: string;
 };
 
 const initialForm: ProductForm = {
@@ -58,6 +59,7 @@ const initialForm: ProductForm = {
   generateCover: true,
   generateImages: true,
   qualityMode: "Premium",
+  referenceText: "",
 };
 
 const steps = [
@@ -501,6 +503,18 @@ export default function NewProjectPage() {
                   }
                 />
 
+                <ReferenceFileField
+                  label="E-book de Referência / Material Base (Opcional)"
+                  value={form.referenceText}
+                  placeholder="Cole aqui o texto de um e-book existente ou clique em 'Carregar arquivo' acima. A IA usará este material como base para criar um infoproduto 100% inédito e único."
+                  onChange={(v) =>
+                    update(
+                      "referenceText",
+                      v
+                    )
+                  }
+                />
+
                 <SelectField
                   label="Idioma"
                   value={
@@ -931,6 +945,60 @@ function ConfigHeader({
   );
 }
 
+
+function ReferenceFileField({
+  label,
+  value,
+  placeholder,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  placeholder?: string;
+  onChange: (value: string) => void;
+}) {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      if (text) {
+        onChange(text);
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  return (
+    <label className="field wide" style={{ gridColumn: 'span 2' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+        <span>{label}</span>
+        <label style={{ fontSize: 13, color: '#c084fc', cursor: 'pointer', fontWeight: 600 }}>
+          📁 Carregar arquivo (.txt / .md / .json)
+          <input type="file" accept=".txt,.md,.json,.csv" onChange={handleFileUpload} style={{ display: 'none' }} />
+        </label>
+      </div>
+      <textarea
+        rows={4}
+        value={value}
+        placeholder={placeholder}
+        style={{
+          width: '100%',
+          background: 'rgba(15, 23, 42, 0.6)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          borderRadius: 12,
+          padding: 12,
+          color: '#f8fafc',
+          fontSize: 14,
+          fontFamily: 'inherit',
+          resize: 'vertical'
+        }}
+        onChange={(event) => onChange(event.target.value)}
+      />
+    </label>
+  );
+}
 
 function TextField({
   label,

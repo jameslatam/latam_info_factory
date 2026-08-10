@@ -50,10 +50,14 @@ function EditorContent() {
         setProject(data);
 
         if (data.pipeline_status) {
-          setPipeline((prev) => ({
-            ...prev,
-            ...data.pipeline_status,
-          }));
+          setPipeline({
+            stage: data.pipeline_status.stage || "queued",
+            progress: data.pipeline_status.progress || 0,
+            message: data.pipeline_status.message || "",
+            pages_done: data.pipeline_status.pages_done,
+            pages_total: data.pipeline_status.pages_total,
+            result_url: data.pipeline_status.result_url || data.results?.url || null,
+          });
         }
 
         if (
@@ -173,14 +177,38 @@ function EditorContent() {
                     {config.pageCount ? ` ${config.pageCount} páginas` : ""}.
                   </p>
                   {pipeline.result_url && (
-                    <a
-                      href={pipeline.result_url}
-                      className="primary small"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      ↓ Baixar PDF
-                    </a>
+                    <div style={{ marginTop: "1rem", padding: "1rem", background: "rgba(255,255,255,0.05)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.1)" }}>
+                      <strong style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", color: "rgba(255,255,255,0.7)" }}>Arquivo PDF gerado:</strong>
+                      
+                      <div style={{ display: "flex", gap: "10px", marginBottom: "1rem" }}>
+                        <button
+                          className="primary small"
+                          onClick={() => {
+                            fetch("http://127.0.0.1:3131/open?path=" + encodeURIComponent(pipeline.result_url!)).catch(() => alert("O worker local precisa estar rodando para abrir o arquivo."));
+                          }}
+                        >
+                          Abrir no Computador
+                        </button>
+                        <a
+                          className="secondary small button"
+                          href={"http://127.0.0.1:3131/download?path=" + encodeURIComponent(pipeline.result_url!)}
+                          download
+                        >
+                          ↓ Fazer Download
+                        </a>
+                      </div>
+
+                      <strong style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.8rem", color: "rgba(255,255,255,0.5)" }}>Caminho local:</strong>
+                      <code style={{ display: "block", padding: "0.5rem", background: "#000", borderRadius: "4px", fontSize: "0.85rem", wordBreak: "break-all", userSelect: "all", cursor: "pointer" }} onClick={(e) => {
+                        navigator.clipboard.writeText(pipeline.result_url!);
+                        const el = e.currentTarget;
+                        const oldBg = el.style.background;
+                        el.style.background = "#2ea043";
+                        setTimeout(() => el.style.background = oldBg, 300);
+                      }}>
+                        {pipeline.result_url}
+                      </code>
+                    </div>
                   )}
                 </div>
               </>
