@@ -446,6 +446,43 @@ function ConfigHeader({ number, title, description }: { number: string; title: s
 
 function ReferenceFileField({ label, value, placeholder, onChange }: { label: string; value: string; placeholder?: string; onChange: (value: string) => void; }) {
   const [loading, setLoading] = useState(false);
+  const [statusText, setStatusText] = useState("");
+
+  const extractPdfClient = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+      script.onload = async () => {
+        try {
+          const pdfjs = (window as any).pdfjsLib;
+          pdfjs.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+          
+          const arrayBuffer = await file.arrayBuffer();
+          const pdfDoc = await pdfjs.getDocument({ data: arrayBuffer }).promise;
+          let fullText = "";
+          
+          for (let i = 1; i <= pdfDoc.numPages; i++) {
+            setStatusText(`Lendo página ${i} de ${pdfDoc.numPages}...`);
+            const page = await pdfDoc.getPage(i);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map((item: any) => item.str).join(" ");
+            if (pageText.trim()) {
+              fullText += `--- Página ${i} ---\n` + pageText + "\n\n";
+            }
+          }
+          resolve(fullText.trim());
+        } catch (e) {
+          reject(e);
+        }
+      };
+      script.onerror = () => reject(new Error("Falha ao carregar motor de PDF"));
+      if ((window as any).pdfjsLib) {
+        script.onload({} as any);
+      } else {
+        document.head.appendChild(script);
+      }
+    });
+  };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -453,23 +490,50 @@ function ReferenceFileField({ label, value, placeholder, onChange }: { label: st
 
     if (file.name.toLowerCase().endsWith(".pdf")) {
       setLoading(true);
+      setStatusText("Iniciando extração do PDF...");
       try {
-        const formData = new FormData();
-        formData.append("file", file);
-        const res = await fetch("/api/extract-pdf", {
-          method: "POST",
-          body: formData,
-        });
-        const data = await res.json();
-        if (data.text) {
-          onChange(data.text);
+        // First try client-side extraction (unlimited size, instant)
+        const extracted = await extractPdfClient(file);
+        if (extracted && extracted.length > 20) {
+          onChange(extracted);
         } else {
-          alert(data.error || "Não foi possível extrair o texto deste PDF.");
+          // Fallback to server API
+          setStatusText("Tentando extração complementar...");
+          const formData = new FormData();
+          formData.append("file", file);
+          const res = await fetch("/api/extract-pdf", {
+            method: "POST",
+            body: formData,
+          });
+          const data = await res.json();
+          if (data.text) {
+            onChange(data.text);
+          } else {
+            alert(data.error || "O PDF parece conter apenas imagens ou está protegido por senha.");
+          }
         }
-      } catch (err) {
-        alert("Erro ao ler o arquivo PDF.");
+      } catch (err: any) {
+        console.error(err);
+        // Fallback to API route
+        try {
+          const formData = new FormData();
+          formData.append("file", file);
+          const res = await fetch("/api/extract-pdf", {
+            method: "POST",
+            body: formData,
+          });
+          const data = await res.json();
+          if (data.text) {
+            onChange(data.text);
+          } else {
+            alert("Não foi possível extrair o texto. O PDF pode ser baseado em imagens/escaneado.");
+          }
+        } catch (apiErr) {
+          alert("Não foi possível ler este PDF. Verifique se o arquivo não está corrompido ou protegido por senha.");
+        }
       } finally {
         setLoading(false);
+        setStatusText("");
       }
       return;
     }
@@ -489,7 +553,7 @@ function ReferenceFileField({ label, value, placeholder, onChange }: { label: st
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
         <span>{label}</span>
         <label style={{ fontSize: "11px", color: "#9d68ff", cursor: loading ? "wait" : "pointer", fontWeight: "bold" }}>
-          {loading ? "⏳ Processando PDF..." : "📁 Carregar arquivo (.pdf / .txt / .md / .json)"}
+          {loading ? `⏳ ${statusText || "Processando PDF..."}` : "📁 Carregar arquivo (.pdf / .txt / .md / .json)"}
           <input type="file" accept=".pdf,.txt,.md,.json,.csv" onChange={handleFileUpload} style={{ display: "none" }} disabled={loading} />
         </label>
       </div>
