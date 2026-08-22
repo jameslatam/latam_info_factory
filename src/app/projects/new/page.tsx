@@ -445,9 +445,35 @@ function ConfigHeader({ number, title, description }: { number: string; title: s
 }
 
 function ReferenceFileField({ label, value, placeholder, onChange }: { label: string; value: string; placeholder?: string; onChange: (value: string) => void; }) {
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    if (file.name.toLowerCase().endsWith(".pdf")) {
+      setLoading(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        const res = await fetch("/api/extract-pdf", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        if (data.text) {
+          onChange(data.text);
+        } else {
+          alert(data.error || "Não foi possível extrair o texto deste PDF.");
+        }
+      } catch (err) {
+        alert("Erro ao ler o arquivo PDF.");
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = (event) => {
       const text = event.target?.result as string;
@@ -462,9 +488,9 @@ function ReferenceFileField({ label, value, placeholder, onChange }: { label: st
     <div className="field wide">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
         <span>{label}</span>
-        <label style={{ fontSize: "11px", color: "#9d68ff", cursor: "pointer", fontWeight: "bold" }}>
-          📁 Carregar arquivo (.txt / .md / .json)
-          <input type="file" accept=".txt,.md,.json,.csv" onChange={handleFileUpload} style={{ display: "none" }} />
+        <label style={{ fontSize: "11px", color: "#9d68ff", cursor: loading ? "wait" : "pointer", fontWeight: "bold" }}>
+          {loading ? "⏳ Processando PDF..." : "📁 Carregar arquivo (.pdf / .txt / .md / .json)"}
+          <input type="file" accept=".pdf,.txt,.md,.json,.csv" onChange={handleFileUpload} style={{ display: "none" }} disabled={loading} />
         </label>
       </div>
       <textarea rows={6} value={value} placeholder={placeholder} onChange={(event) => onChange(event.target.value)} />
